@@ -1,0 +1,1139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Bible Recap - Chronological Reading Tracker</title>
+
+  <!-- PWA & Mobile Meta Tags -->
+  <meta name="theme-color" content="#1d72b8">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Bible Recap">
+  <meta name="application-name" content="The Bible Recap">
+  <meta name="description" content="365-Day Chronological Reading Plan tracker with auto-focus on your next day.">
+
+  <!-- SVG App Icon & Apple Touch Icon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' fill='%231d72b8'%3E%3Crect width='512' height='512' rx='108' fill='%231d72b8'/%3E%3Cpath d='M110 90h292v332H110z' fill='none' stroke='white' stroke-width='24'/%3E%3Ctext x='256' y='275' fill='white' font-family='sans-serif' font-weight='900' font-size='82' text-anchor='middle'%3EBIBLE%3C/text%3E%3Ctext x='256' y='360' fill='white' font-family='sans-serif' font-weight='800' font-size='66' text-anchor='middle'%3ERECAP%3C/text%3E%3Ctext x='256' y='160' fill='white' font-family='sans-serif' font-weight='700' font-size='42' letter-spacing='6' text-anchor='middle'%3ETHE%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='108' fill='%231d72b8'/%3E%3Ctext x='256' y='275' fill='white' font-family='sans-serif' font-weight='900' font-size='82' text-anchor='middle'%3EBIBLE%3C/text%3E%3Ctext x='256' y='360' fill='white' font-family='sans-serif' font-weight='800' font-size='66' text-anchor='middle'%3ERECAP%3C/text%3E%3Ctext x='256' y='160' fill='white' font-family='sans-serif' font-weight='700' font-size='42' letter-spacing='6' text-anchor='middle'%3ETHE%3C/text%3E%3C/svg%3E">
+
+  <!-- Embedded Web App Manifest for Installability -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22The%20Bible%20Recap%20Tracker%22%2C%22short_name%22%3A%22BibleRecap%22%2C%22description%22%3A%22Chronological%20365-day%20Bible%20reading%20tracker%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%231d72b8%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%253E%253Crect%20width%3D'512'%20height%3D'512'%20rx%3D'108'%20fill%3D'%231d72b8'%2F%253E%253Ctext%20x%3D'256'%20y%3D'275'%20fill%3D'white'%20font-family%3D'sans-serif'%20font-weight%3D'900'%20font-size%3D'82'%20text-anchor%3D'middle'%253EBIBLE%253C%2Ftext%253E%253Ctext%20x%3D'256'%20y%3D'360'%20fill%3D'white'%20font-family%3D'sans-serif'%20font-weight%3D'800'%20font-size%3D'66'%20text-anchor%3D'middle'%253ERECAP%253C%2Ftext%253E%253Ctext%20x%3D'256'%20y%3D'160'%20fill%3D'white'%20font-family%3D'sans-serif'%20font-weight%3D'700'%20font-size%3D'42'%20letter-spacing%3D'6'%20text-anchor%3D'middle'%253ETHE%253C%2Ftext%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#1d72b8', // The Bible Recap signature blue tone
+              600: '#155d9b',
+              700: '#0f4c81',
+              800: '#0c3b66',
+              900: '#082846',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            display: ['"Outfit"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom scrollbar and smooth scroll behavior */
+    html {
+      scroll-behavior: smooth;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    .dark ::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    .pulse-target {
+      animation: highlightGlow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+    @keyframes highlightGlow {
+      0%, 100% {
+        box-shadow: 0 0 0 4px rgba(29, 114, 184, 0.35);
+        transform: translateY(-2px);
+      }
+      50% {
+        box-shadow: 0 0 0 8px rgba(29, 114, 184, 0.08);
+        transform: translateY(-2px);
+      }
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 min-h-screen font-sans antialiased transition-colors duration-200">
+
+  <header class="sticky top-0 z-30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo and Brand -->
+        <div class="flex items-center space-x-3.5">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-600 to-brand-800 flex items-center justify-center text-white shadow-md shadow-brand-500/20 font-display font-extrabold text-xl tracking-tighter">
+            TBR
+          </div>
+          <div>
+            <h1 class="text-xl sm:text-2xl font-bold tracking-tight font-display text-brand-800 dark:text-brand-100">
+              The Bible Recap
+            </h1>
+            <p class="text-xs text-slate-500 dark:text-slate-400 font-medium">365-Day Chronological Reading Plan</p>
+          </div>
+        </div>
+
+        <!-- Quick Actions & Focus Button -->
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <button id="pwaInstallBtn" class="hidden inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white shadow-sm transition">
+            <i data-lucide="download" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Install App</span>
+          </button>
+
+          <button id="focusTargetBtn" title="Jump straight to current reading day" class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-lg bg-brand-500 hover:bg-brand-600 active:scale-95 text-white shadow-sm transition">
+            <i data-lucide="crosshair" class="w-4 h-4"></i>
+            <span class="hidden sm:inline">Jump to</span> Next Day
+          </button>
+
+          <button id="prayerModalBtn" class="inline-flex items-center gap-1 px-3 py-2 text-xs sm:text-sm font-medium rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 transition">
+            <i data-lucide="sparkles" class="w-4 h-4 text-amber-500"></i>
+            <span class="hidden sm:inline">5 Prayers</span>
+          </button>
+
+          <button id="themeToggleBtn" aria-label="Toggle theme" class="p-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+            <i data-lucide="sun" class="w-4 h-4 hidden dark:inline"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progress overview mini bar -->
+    <div class="w-full bg-slate-200 dark:bg-slate-800 h-1.5">
+      <div id="topProgressBar" class="h-full bg-brand-500 transition-all duration-500" style="width: 0%"></div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6">
+
+    <!-- Hero Stats & Last Activity Card -->
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6">
+      <!-- Last Read Spotlight (Prominent focus banner) -->
+      <div class="md:col-span-2 bg-gradient-to-r from-brand-700 via-brand-800 to-slate-900 rounded-2xl p-5 sm:p-6 text-white shadow-lg relative overflow-hidden flex flex-col justify-between">
+        <div class="absolute -right-6 -bottom-6 w-36 h-36 bg-white/5 rounded-full blur-xl pointer-events-none"></div>
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-500/40 text-brand-100 border border-brand-400/30">
+              Current Reading Target
+            </span>
+            <span id="spotlightStreak" class="text-xs font-medium text-brand-200 flex items-center gap-1">
+              <i data-lucide="flame" class="w-3.5 h-3.5 text-orange-400"></i> Active Plan
+            </span>
+          </div>
+          <h2 id="spotlightTitle" class="text-2xl sm:text-3xl font-extrabold tracking-tight font-display">Day 001</h2>
+          <p id="spotlightPassage" class="text-brand-100 font-semibold text-lg mt-0.5">Gen 1-3</p>
+          <p id="spotlightStatus" class="text-xs text-brand-200/80 mt-1">Ready for your quiet time today.</p>
+        </div>
+
+        <div class="pt-4 mt-3 border-t border-white/10 flex flex-wrap gap-2 items-center">
+          <button id="spotlightActionBtn" class="px-4 py-2 rounded-lg bg-white text-brand-800 text-xs sm:text-sm font-bold shadow hover:bg-brand-50 active:scale-95 transition flex items-center gap-1.5">
+            <i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> Mark Day Done
+          </button>
+          <a id="spotlightReadLink" href="https://www.biblegateway.com/passage/?search=Gen+1-3&version=NIV" target="_blank" rel="noopener noreferrer" class="px-3 py-2 rounded-lg bg-brand-600/70 hover:bg-brand-600 text-white text-xs sm:text-sm font-medium transition flex items-center gap-1">
+            <i data-lucide="book-open" class="w-4 h-4"></i> Open in Bible
+          </a>
+        </div>
+      </div>
+
+      <!-- Progress Percentage Card -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">Total Completion</p>
+          <div class="p-2 bg-brand-50 dark:bg-slate-800 rounded-xl text-brand-600 dark:text-brand-400">
+            <i data-lucide="award" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <div class="my-3">
+          <div class="flex items-baseline gap-2">
+            <span id="percentDoneDisplay" class="text-3xl sm:text-4xl font-extrabold font-display text-slate-900 dark:text-white">0%</span>
+            <span id="fractionDoneDisplay" class="text-xs text-slate-500 font-medium">0 / 365 days</span>
+          </div>
+          <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2.5 mt-3 overflow-hidden">
+            <div id="statProgressBar" class="bg-emerald-500 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="text-xs text-slate-500 flex justify-between">
+          <span id="daysRemainingText">365 days left</span>
+          <span id="yearPaceText">Keep steady!</span>
+        </div>
+      </div>
+
+      <!-- Quick Tips & Plan Info -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col justify-between">
+        <div class="flex items-center justify-between">
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">The He Loves You Rule</p>
+          <div class="p-2 bg-amber-50 dark:bg-slate-800 rounded-xl text-amber-500">
+            <i data-lucide="heart" class="w-5 h-5"></i>
+          </div>
+        </div>
+        <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed my-2">
+          "Don't worry if you miss a day! You're not behind; just pick up right where you left off. He's where the joy is!"
+        </p>
+        <div class="flex gap-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button id="resetProgressBtn" class="text-xs text-rose-500 hover:text-rose-600 dark:text-rose-400 font-medium transition flex items-center gap-1">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset All Data
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
+      <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+        
+        <!-- Search Input -->
+        <div class="relative flex-1">
+          <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"></i>
+          <input 
+            type="text" 
+            id="searchInput" 
+            placeholder="Search day (e.g. 54) or book (e.g. Job, Exo, Matt, Ps)..." 
+            class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/80 focus:bg-white dark:focus:bg-slate-800 text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+          />
+        </div>
+
+        <!-- Filter tabs: All, Unread, Done -->
+        <div class="inline-flex rounded-xl p-1 bg-slate-100 dark:bg-slate-800 text-xs font-medium text-slate-600 dark:text-slate-300 self-start md:self-auto">
+          <button data-filter="all" class="filter-tab active px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm font-semibold transition">
+            All (365)
+          </button>
+          <button data-filter="pending" class="filter-tab px-3 py-1.5 rounded-lg hover:text-slate-900 dark:hover:text-white transition">
+            Remaining
+          </button>
+          <button data-filter="completed" class="filter-tab px-3 py-1.5 rounded-lg hover:text-slate-900 dark:hover:text-white transition">
+            Completed
+          </button>
+        </div>
+
+        <!-- Quarter Jump buttons -->
+        <div class="flex items-center gap-1 text-xs">
+          <span class="text-slate-400 dark:text-slate-500 mr-1 hidden lg:inline">Quarter:</span>
+          <button onclick="scrollToQuarter(1)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 font-medium text-slate-700 dark:text-slate-300 transition">Q1</button>
+          <button onclick="scrollToQuarter(92)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 font-medium text-slate-700 dark:text-slate-300 transition">Q2</button>
+          <button onclick="scrollToQuarter(183)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 font-medium text-slate-700 dark:text-slate-300 transition">Q3</button>
+          <button onclick="scrollToQuarter(274)" class="px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-brand-50 dark:hover:bg-slate-700 font-medium text-slate-700 dark:text-slate-300 transition">Q4 (NT)</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="planGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-3.5">
+      <!-- Generated via JS for speed & lightness -->
+    </div>
+
+    <!-- Empty state for search filters -->
+    <div id="emptySearchNotice" class="hidden text-center py-16">
+      <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mb-3">
+        <i data-lucide="compass" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-base font-semibold text-slate-800 dark:text-slate-200">No reading days match your filter</h3>
+      <p class="text-xs text-slate-500 mt-1">Try another search keyword or clear filters.</p>
+    </div>
+  </main>
+
+  <div id="prayerModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative transition-all">
+      <button id="closePrayerModal" class="absolute top-4 right-4 p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold font-display text-slate-900 dark:text-white">Before You Read God's Word</h3>
+          <p class="text-xs text-slate-500">The 5 prayers suggested by The Bible Recap</p>
+        </div>
+      </div>
+
+      <div class="space-y-3 my-5">
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center shrink-0">1</span>
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-200">"God, give me wisdom, knowledge, and understanding."</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center shrink-0">2</span>
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-200">"Let any knowledge I gain help me love You and others more, and not puff me up."</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center shrink-0">3</span>
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-200">"Help me see something new about You that I've never seen before."</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center shrink-0">4</span>
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-200">"Correct any lies I believe about You or anything I misunderstand."</p>
+        </div>
+
+        <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 flex items-start gap-3">
+          <span class="w-6 h-6 rounded-full bg-brand-500 text-white text-xs font-bold flex items-center justify-center shrink-0">5</span>
+          <p class="text-sm font-medium text-slate-700 dark:text-slate-200">"Direct my steps according to Your Word. Amen."</p>
+        </div>
+      </div>
+
+      <button id="modalGotItBtn" class="w-full py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold transition shadow-md">
+        I'm Ready to Read
+      </button>
+    </div>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-16 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white text-sm px-4 py-3 rounded-xl shadow-xl flex items-center gap-2 border border-slate-700">
+    <i data-lucide="check-circle" class="w-4 h-4 text-emerald-400"></i>
+    <span id="toastMsg">Saved</span>
+  </div>
+
+  <div id="iosInstallModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl max-w-sm w-full p-5 shadow-2xl relative">
+      <button id="closeIosInstallModal" class="absolute top-3 right-3 p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-10 h-10 rounded-xl bg-brand-500 text-white flex items-center justify-center font-bold font-display">TBR</div>
+        <div>
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white">Install on iPhone / iPad</h3>
+          <p class="text-xs text-slate-500">Run as a standalone full screen app</p>
+        </div>
+      </div>
+      <ol class="text-xs space-y-2.5 text-slate-600 dark:text-slate-300 my-4 bg-slate-50 dark:bg-slate-800/50 p-3.5 rounded-xl border border-slate-200/60 dark:border-slate-800">
+        <li class="flex items-center gap-2">
+          <span class="w-5 h-5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold flex items-center justify-center shrink-0">1</span>
+          <span>Tap the <strong>Share</strong> button <i data-lucide="share" class="w-3.5 h-3.5 inline text-brand-500"></i> at the bottom of Safari.</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="w-5 h-5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold flex items-center justify-center shrink-0">2</span>
+          <span>Scroll down and select <strong>"Add to Home Screen"</strong>.</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <span class="w-5 h-5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold flex items-center justify-center shrink-0">3</span>
+          <span>Tap <strong>Add</strong> in the top-right corner.</span>
+        </li>
+      </ol>
+      <button id="dismissIosModalBtn" class="w-full py-2 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold rounded-lg hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+        Got it
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let deferredInstallPrompt = null;
+    const pwaInstallBtn = document.getElementById('pwaInstallBtn');
+    const iosInstallModal = document.getElementById('iosInstallModal');
+    const closeIosInstallModal = document.getElementById('closeIosInstallModal');
+    const dismissIosModalBtn = document.getElementById('dismissIosModalBtn');
+
+    // Detect iOS Safari
+    const isIos = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    const isInStandaloneMode = ('standalone' in window.navigator) && (window.navigator.standalone);
+
+    // Register Service Worker from an in-memory blob to maintain single-file mandate
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE_NAME = 'tbr-cache-v1';
+        self.addEventListener('install', (event) => {
+          self.skipWaiting();
+        });
+        self.addEventListener('activate', (event) => {
+          event.waitUntil(self.clients.claim());
+        });
+        self.addEventListener('fetch', (event) => {
+          // Pass-through network first with cache fallback
+          event.respondWith(
+            fetch(event.request).catch(() => caches.match(event.request))
+          );
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl)
+        .then(() => console.log('TBR Service Worker active'))
+        .catch(err => console.log('SW registration note:', err));
+    }
+
+    // Capture standard PWA installation prompt (Chrome, Edge, Android)
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      pwaInstallBtn.classList.remove('hidden');
+    });
+
+    // Handle iOS special installation banner
+    if (isIos && !isInStandaloneMode) {
+      pwaInstallBtn.classList.remove('hidden');
+    }
+
+    pwaInstallBtn.addEventListener('click', async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const { outcome } = await deferredInstallPrompt.userChoice;
+        if (outcome === 'accepted') {
+          pwaInstallBtn.classList.add('hidden');
+        }
+        deferredInstallPrompt = null;
+      } else if (isIos) {
+        iosInstallModal.classList.remove('hidden');
+      } else {
+        showToast("Use browser settings: 'Install' or 'Add to Home Screen'");
+      }
+    });
+
+    window.addEventListener('appinstalled', () => {
+      pwaInstallBtn.classList.add('hidden');
+      showToast("🎉 App installed successfully!");
+      deferredInstallPrompt = null;
+    });
+
+    if (closeIosInstallModal) {
+      closeIosInstallModal.addEventListener('click', () => iosInstallModal.classList.add('hidden'));
+    }
+    if (dismissIosModalBtn) {
+      dismissIosModalBtn.addEventListener('click', () => iosInstallModal.classList.add('hidden'));
+    }
+
+    // Complete 365 readings transcribed verbatim from The Bible Recap Chronological Plan PDF
+    const READING_PLAN = [
+      { day: 1, passages: "Gen 1-3" },
+      { day: 2, passages: "Gen 4-7" },
+      { day: 3, passages: "Gen 8-11" },
+      { day: 4, passages: "Job 1-5" },
+      { day: 5, passages: "Job 6-9" },
+      { day: 6, passages: "Job 10-13" },
+      { day: 7, passages: "Job 14-16" },
+      { day: 8, passages: "Job 17-20" },
+      { day: 9, passages: "Job 21-23" },
+      { day: 10, passages: "Job 24-28" },
+      { day: 11, passages: "Job 29-31" },
+      { day: 12, passages: "Job 32-34" },
+      { day: 13, passages: "Job 35-37" },
+      { day: 14, passages: "Job 38-39" },
+      { day: 15, passages: "Job 40-42" },
+      { day: 16, passages: "Gen 12-15" },
+      { day: 17, passages: "Gen 16-18" },
+      { day: 18, passages: "Gen 19-21" },
+      { day: 19, passages: "Gen 22-24" },
+      { day: 20, passages: "Gen 25-26" },
+      { day: 21, passages: "Gen 27-29" },
+      { day: 22, passages: "Gen 30-31" },
+      { day: 23, passages: "Gen 32-34" },
+      { day: 24, passages: "Gen 35-37" },
+      { day: 25, passages: "Gen 38-40" },
+      { day: 26, passages: "Gen 41-42" },
+      { day: 27, passages: "Gen 43-45" },
+      { day: 28, passages: "Gen 46-47" },
+      { day: 29, passages: "Gen 48-50" },
+      { day: 30, passages: "Exo 1-3" },
+      { day: 31, passages: "Exo 4-6" },
+      { day: 32, passages: "Exo 7-9" },
+      { day: 33, passages: "Exo 10-12" },
+      { day: 34, passages: "Exo 13-15" },
+      { day: 35, passages: "Exo 16-18" },
+      { day: 36, passages: "Exo 19-21" },
+      { day: 37, passages: "Exo 22-24" },
+      { day: 38, passages: "Exo 25-27" },
+      { day: 39, passages: "Exo 28-29" },
+      { day: 40, passages: "Exo 30-32" },
+      { day: 41, passages: "Exo 33-35" },
+      { day: 42, passages: "Exo 36-38" },
+      { day: 43, passages: "Exo 39-40" },
+      { day: 44, passages: "Lev 1-4" },
+      { day: 45, passages: "Lev 5-7" },
+      { day: 46, passages: "Lev 8-10" },
+      { day: 47, passages: "Lev 11-13" },
+      { day: 48, passages: "Lev 14-15" },
+      { day: 49, passages: "Lev 16-18" },
+      { day: 50, passages: "Lev 19-21" },
+      { day: 51, passages: "Lev 22-23" },
+      { day: 52, passages: "Lev 24-25" },
+      { day: 53, passages: "Lev 26-27" },
+      { day: 54, passages: "Num 1-2" },
+      { day: 55, passages: "Num 3-4" },
+      { day: 56, passages: "Num 5-6" },
+      { day: 57, passages: "Num 7" },
+      { day: 58, passages: "Num 8-10" },
+      { day: 59, passages: "Num 11-13" },
+      { day: 60, passages: "Num 14-15, Ps 90" },
+      { day: 61, passages: "Num 16-17" },
+      { day: 62, passages: "Num 18-20" },
+      { day: 63, passages: "Num 21-22" },
+      { day: 64, passages: "Num 23-25" },
+      { day: 65, passages: "Num 26-27" },
+      { day: 66, passages: "Num 28-30" },
+      { day: 67, passages: "Num 31-32" },
+      { day: 68, passages: "Num 33-34" },
+      { day: 69, passages: "Num 35-36" },
+      { day: 70, passages: "Deut 1-2" },
+      { day: 71, passages: "Deut 3-4" },
+      { day: 72, passages: "Deut 5-7" },
+      { day: 73, passages: "Deut 8-10" },
+      { day: 74, passages: "Deut 11-13" },
+      { day: 75, passages: "Deut 14-16" },
+      { day: 76, passages: "Deut 17-20" },
+      { day: 77, passages: "Deut 21-23" },
+      { day: 78, passages: "Deut 24-27" },
+      { day: 79, passages: "Deut 28-29" },
+      { day: 80, passages: "Deut 30-31" },
+      { day: 81, passages: "Deut 32-34, Ps 91" },
+      { day: 82, passages: "Josh 1-4" },
+      { day: 83, passages: "Josh 5-8" },
+      { day: 84, passages: "Josh 9-11" },
+      { day: 85, passages: "Josh 12-15" },
+      { day: 86, passages: "Josh 16-18" },
+      { day: 87, passages: "Josh 19-21" },
+      { day: 88, passages: "Josh 22-24" },
+      { day: 89, passages: "Jdg 1-2" },
+      { day: 90, passages: "Jdg 3-5" },
+      { day: 91, passages: "Jdg 6-7" },
+      { day: 92, passages: "Jdg 8-9" },
+      { day: 93, passages: "Jdg 10-12" },
+      { day: 94, passages: "Jdg 13-15" },
+      { day: 95, passages: "Jdg 16-18" },
+      { day: 96, passages: "Jdg 19-21" },
+      { day: 97, passages: "Ruth 1-4" },
+      { day: 98, passages: "1 Sam 1-3" },
+      { day: 99, passages: "1 Sam 4-8" },
+      { day: 100, passages: "1 Sam 9-12" },
+      { day: 101, passages: "1 Sam 13-14" },
+      { day: 102, passages: "1 Sam 15-17" },
+      { day: 103, passages: "1 Sam 18-20, Ps 11, 59" },
+      { day: 104, passages: "1 Sam 21-24" },
+      { day: 105, passages: "Ps 7, 27, 31, 34, 52" },
+      { day: 106, passages: "1 Sam 25-27" },
+      { day: 107, passages: "Ps 56, 120, 140-142" },
+      { day: 108, passages: "Ps 17, 35, 54, 63" },
+      { day: 109, passages: "1 Sam 28-31, Ps 18" },
+      { day: 110, passages: "Ps 121, 123-125, 128-130" },
+      { day: 111, passages: "2 Sam 1-4" },
+      { day: 112, passages: "Ps 6, 8-10, 14, 16, 19, 21" },
+      { day: 113, passages: "1 Ch 1-2" },
+      { day: 114, passages: "Ps 43-45, 49, 84-85, 87" },
+      { day: 115, passages: "1 Ch 3-5" },
+      { day: 116, passages: "Ps 73, 77-78" },
+      { day: 117, passages: "1 Ch 6" },
+      { day: 118, passages: "Ps 81, 88, 92-93" },
+      { day: 119, passages: "1 Ch 7-10" },
+      { day: 120, passages: "Ps 102-104" },
+      { day: 121, passages: "2 Sam 5, 1 Ch 11-12" },
+      { day: 122, passages: "Ps 133" },
+      { day: 123, passages: "Ps 106-107" },
+      { day: 124, passages: "1 Ch 13-16" },
+      { day: 125, passages: "Ps 1-2, 15, 22-24, 47, 68" },
+      { day: 126, passages: "Ps 89, 96, 100-101, 105, 132" },
+      { day: 127, passages: "2 Sam 6-7, 1 Ch 17" },
+      { day: 128, passages: "Ps 25, 29, 33, 36, 39" },
+      { day: 129, passages: "2 Sam 8-9, 1 Ch 18" },
+      { day: 130, passages: "Ps 50, 53, 60, 75" },
+      { day: 131, passages: "2 Sam 10, 1 Ch 19, Ps 20" },
+      { day: 132, passages: "Ps 65-67, 69-70" },
+      { day: 133, passages: "2 Sam 11-12, 1 Ch 20" },
+      { day: 134, passages: "Ps 32, 51, 86, 122" },
+      { day: 135, passages: "2 Sam 13-15" },
+      { day: 136, passages: "Ps 3-4, 12-13, 28, 55" },
+      { day: 137, passages: "2 Sam 16-18" },
+      { day: 138, passages: "Ps 26, 40, 58, 61-62, 64" },
+      { day: 139, passages: "2 Sam 19-21" },
+      { day: 140, passages: "Ps 5, 38, 41-42" },
+      { day: 141, passages: "2 Sam 22-23, Ps 57" },
+      { day: 142, passages: "Ps 95, 97-99" },
+      { day: 143, passages: "2 Sam 24, 1 Ch 21-22, Ps 30" },
+      { day: 144, passages: "Ps 108-110" },
+      { day: 145, passages: "1 Ch 23-25" },
+      { day: 146, passages: "Ps 131, 138-139, 143-145" },
+      { day: 147, passages: "1 Ch 26-29, Ps 127" },
+      { day: 148, passages: "Ps 111-118" },
+      { day: 149, passages: "1 Kgs 1-2, Ps 37, 71, 94" },
+      { day: 150, passages: "Ps 119" },
+      { day: 151, passages: "1 Kgs 3-4" },
+      { day: 152, passages: "2 Ch 1, Ps 72" },
+      { day: 153, passages: "Song 1-8" },
+      { day: 154, passages: "Prov 1-3" },
+      { day: 155, passages: "Prov 4-6" },
+      { day: 156, passages: "Prov 7-9" },
+      { day: 157, passages: "Prov 10-12" },
+      { day: 158, passages: "Prov 13-15" },
+      { day: 159, passages: "Prov 16-18" },
+      { day: 160, passages: "Prov 19-21" },
+      { day: 161, passages: "Prov 22-24" },
+      { day: 162, passages: "1 Kgs 5-6, 2 Ch 2-3" },
+      { day: 163, passages: "1 Kgs 7, 2 Ch 4" },
+      { day: 164, passages: "1 Kgs 8, 2 Ch 5" },
+      { day: 165, passages: "2 Ch 6-7, Ps 136" },
+      { day: 166, passages: "Ps 134, 146-150" },
+      { day: 167, passages: "1 Kgs 9, 2 Ch 8" },
+      { day: 168, passages: "Prov 25-26" },
+      { day: 169, passages: "Prov 27-29" },
+      { day: 170, passages: "Ecc 1-6" },
+      { day: 171, passages: "Ecc 7-12" },
+      { day: 172, passages: "1 Kgs 10-11, 2 Ch 9" },
+      { day: 173, passages: "Prov 30-31" },
+      { day: 174, passages: "1 Kgs 12-14" },
+      { day: 175, passages: "2 Ch 10-12" },
+      { day: 176, passages: "1 Kgs 15, 2 Ch 13-16" },
+      { day: 177, passages: "1 Kgs 16, 2 Ch 17" },
+      { day: 178, passages: "1 Kgs 17-19" },
+      { day: 179, passages: "1 Kgs 20-21" },
+      { day: 180, passages: "1 Kgs 22, 2 Ch 18" },
+      { day: 181, passages: "2 Ch 19-23" },
+      { day: 182, passages: "Oba 1, Ps 82-83" },
+      { day: 183, passages: "2 Kgs 1-4" },
+      { day: 184, passages: "2 Kgs 5-8" },
+      { day: 185, passages: "2 Kgs 9-11" },
+      { day: 186, passages: "2 Kgs 12-13, 2 Ch 24" },
+      { day: 187, passages: "2 Kgs 14, 2 Ch 25" },
+      { day: 188, passages: "Jonah 1-4" },
+      { day: 189, passages: "2 Kgs 15, 2 Ch 26" },
+      { day: 190, passages: "Isa 1-4" },
+      { day: 191, passages: "Isa 5-8" },
+      { day: 192, passages: "Amos 1-5" },
+      { day: 193, passages: "Amos 6-9" },
+      { day: 194, passages: "2 Ch 27, Isa 9-12" },
+      { day: 195, passages: "Micah 1-7" },
+      { day: 196, passages: "2 Ch 28, 2 Kgs 16-17" },
+      { day: 197, passages: "Isa 13-17" },
+      { day: 198, passages: "Isa 18-22" },
+      { day: 199, passages: "Isa 23-27" },
+      { day: 200, passages: "2 Kgs 18, 2 Ch 29-31, Ps 48" },
+      { day: 201, passages: "Hosea 1-7" },
+      { day: 202, passages: "Hosea 8-14" },
+      { day: 203, passages: "Isa 28-30" },
+      { day: 204, passages: "Isa 31-34" },
+      { day: 205, passages: "Isa 35-36" },
+      { day: 206, passages: "Isa 37-39, Ps 76" },
+      { day: 207, passages: "Isa 40-43" },
+      { day: 208, passages: "Isa 44-48" },
+      { day: 209, passages: "2 Kgs 19, Ps 46, 80, 135" },
+      { day: 210, passages: "Isa 49-53" },
+      { day: 211, passages: "Isa 54-58" },
+      { day: 212, passages: "Isa 59-63" },
+      { day: 213, passages: "Isa 64-66" },
+      { day: 214, passages: "2 Kgs 20-21" },
+      { day: 215, passages: "2 Ch 32-33" },
+      { day: 216, passages: "Nahum 1-3" },
+      { day: 217, passages: "2 Kgs 22-23, 2 Ch 34-35" },
+      { day: 218, passages: "Zeph 1-3" },
+      { day: 219, passages: "Jer 1-3" },
+      { day: 220, passages: "Jer 4-6" },
+      { day: 221, passages: "Jer 7-9" },
+      { day: 222, passages: "Jer 10-13" },
+      { day: 223, passages: "Jer 14-17" },
+      { day: 224, passages: "Jer 18-22" },
+      { day: 225, passages: "Jer 23-25" },
+      { day: 226, passages: "Jer 26-29" },
+      { day: 227, passages: "Jer 30-31" },
+      { day: 228, passages: "Jer 32-34" },
+      { day: 229, passages: "Jer 35-37" },
+      { day: 230, passages: "Jer 38-40, Ps 74, 79" },
+      { day: 231, passages: "2 Kgs 24-25, 2 Ch 36" },
+      { day: 232, passages: "Hab 1-3" },
+      { day: 233, passages: "Jer 41-45" },
+      { day: 234, passages: "Jer 46-48" },
+      { day: 235, passages: "Jer 49-50" },
+      { day: 236, passages: "Jer 51-52" },
+      { day: 237, passages: "Lam 1-2" },
+      { day: 238, passages: "Lam 3-5" },
+      { day: 239, passages: "Ezek 1-4" },
+      { day: 240, passages: "Ezek 5-8" },
+      { day: 241, passages: "Ezek 9-12" },
+      { day: 242, passages: "Ezek 13-15" },
+      { day: 243, passages: "Ezek 16-17" },
+      { day: 244, passages: "Ezek 18-20" },
+      { day: 245, passages: "Ezek 21-22" },
+      { day: 246, passages: "Ezek 23-24" },
+      { day: 247, passages: "Ezek 25-27" },
+      { day: 248, passages: "Ezek 28-30" },
+      { day: 249, passages: "Ezek 31-33" },
+      { day: 250, passages: "Ezek 34-36" },
+      { day: 251, passages: "Ezek 37-39" },
+      { day: 252, passages: "Ezek 40-42" },
+      { day: 253, passages: "Ezek 43-45" },
+      { day: 254, passages: "Ezek 46-48" },
+      { day: 255, passages: "Joel 1-3" },
+      { day: 256, passages: "Dan 1-3" },
+      { day: 257, passages: "Dan 4-6" },
+      { day: 258, passages: "Dan 7-9" },
+      { day: 259, passages: "Dan 10-12" },
+      { day: 260, passages: "Ezra 1-3" },
+      { day: 261, passages: "Ezra 4-6, Ps 137" },
+      { day: 262, passages: "Hag 1-2" },
+      { day: 263, passages: "Zec 1-4" },
+      { day: 264, passages: "Zec 5-9" },
+      { day: 265, passages: "Zec 10-14" },
+      { day: 266, passages: "Esther 1-5" },
+      { day: 267, passages: "Esther 6-10" },
+      { day: 268, passages: "Ezra 7-10" },
+      { day: 269, passages: "Neh 1-5" },
+      { day: 270, passages: "Neh 6-7" },
+      { day: 271, passages: "Neh 8-10" },
+      { day: 272, passages: "Neh 11-13, Ps 126" },
+      { day: 273, passages: "Mal 1-4" },
+      { day: 274, passages: "Luke 1, John 1" },
+      { day: 275, passages: "Matt 1, Luke 2" },
+      { day: 276, passages: "Matt 2" },
+      { day: 277, passages: "Matt 3, Mark 1, Luke 3" },
+      { day: 278, passages: "Matt 4, Luke 4-5" },
+      { day: 279, passages: "John 2-4" },
+      { day: 280, passages: "Matt 8, Mark 2" },
+      { day: 281, passages: "John 5" },
+      { day: 282, passages: "Matt 12, Mark 3, Luke 6" },
+      { day: 283, passages: "Matt 5-7" },
+      { day: 284, passages: "Matt 9, Luke 7" },
+      { day: 285, passages: "Matt 11" },
+      { day: 286, passages: "Luke 11" },
+      { day: 287, passages: "Matt 13, Luke 8" },
+      { day: 288, passages: "Mark 4-5" },
+      { day: 289, passages: "Matt 10" },
+      { day: 290, passages: "Matt 14, Mark 6, Luke 9" },
+      { day: 291, passages: "John 6" },
+      { day: 292, passages: "Matt 15, Mark 7" },
+      { day: 293, passages: "Matt 16, Mark 8" },
+      { day: 294, passages: "Matt 17, Mark 9" },
+      { day: 295, passages: "Matt 18" },
+      { day: 296, passages: "John 7-8" },
+      { day: 297, passages: "John 9-10" },
+      { day: 298, passages: "Luke 10" },
+      { day: 299, passages: "Luke 12-13" },
+      { day: 300, passages: "Luke 14-15" },
+      { day: 301, passages: "Luke 16-17" },
+      { day: 302, passages: "John 11" },
+      { day: 303, passages: "Luke 18" },
+      { day: 304, passages: "Matt 19, Mark 10" },
+      { day: 305, passages: "Matt 20-21" },
+      { day: 306, passages: "Luke 19" },
+      { day: 307, passages: "Mark 11, John 12" },
+      { day: 308, passages: "Matt 22, Mark 12" },
+      { day: 309, passages: "Matt 23, Luke 20-21" },
+      { day: 310, passages: "Mark 13" },
+      { day: 311, passages: "Matt 24" },
+      { day: 312, passages: "Matt 25" },
+      { day: 313, passages: "Matt 26, Mark 14" },
+      { day: 314, passages: "Luke 22, John 13" },
+      { day: 315, passages: "John 14-17" },
+      { day: 316, passages: "Matt 27, Mark 15" },
+      { day: 317, passages: "Luke 23, John 18-19" },
+      { day: 318, passages: "Matt 28, Mark 16" },
+      { day: 319, passages: "Luke 24, John 20-21" },
+      { day: 320, passages: "Acts 1-3" },
+      { day: 321, passages: "Acts 4-6" },
+      { day: 322, passages: "Acts 7-8" },
+      { day: 323, passages: "Acts 9-10" },
+      { day: 324, passages: "Acts 11-12" },
+      { day: 325, passages: "Acts 13-14" },
+      { day: 326, passages: "Jas 1-5" },
+      { day: 327, passages: "Acts 15-16" },
+      { day: 328, passages: "Gal 1-3" },
+      { day: 329, passages: "Gal 4-6" },
+      { day: 330, passages: "Acts 17" },
+      { day: 331, passages: "1 Th 1-5, 2 Th 1-3" },
+      { day: 332, passages: "Acts 18-19" },
+      { day: 333, passages: "1 Cor 1-4" },
+      { day: 334, passages: "1 Cor 5-8" },
+      { day: 335, passages: "1 Cor 9-11" },
+      { day: 336, passages: "1 Cor 12-14" },
+      { day: 337, passages: "1 Cor 15-16" },
+      { day: 338, passages: "2 Cor 1-4" },
+      { day: 339, passages: "2 Cor 5-9" },
+      { day: 340, passages: "2 Cor 10-13" },
+      { day: 341, passages: "Rom 1-3" },
+      { day: 342, passages: "Rom 4-7" },
+      { day: 343, passages: "Rom 8-10" },
+      { day: 344, passages: "Rom 11-13" },
+      { day: 345, passages: "Rom 14-16" },
+      { day: 346, passages: "Acts 20-23" },
+      { day: 347, passages: "Acts 24-26" },
+      { day: 348, passages: "Acts 27-28" },
+      { day: 349, passages: "Col 1-4, Phm 1" },
+      { day: 350, passages: "Eph 1-6" },
+      { day: 351, passages: "Php 1-4" },
+      { day: 352, passages: "1 Tim 1-6" },
+      { day: 353, passages: "Titus 1-3" },
+      { day: 354, passages: "1 Pet 1-5" },
+      { day: 355, passages: "Heb 1-6" },
+      { day: 356, passages: "Heb 7-10" },
+      { day: 357, passages: "Heb 11-13" },
+      { day: 358, passages: "2 Tim 1-4" },
+      { day: 359, passages: "2 Pet 1-3, Jude 1" },
+      { day: 360, passages: "1 John 1-5" },
+      { day: 361, passages: "2 John 1, 3 John 1" },
+      { day: 362, passages: "Rev 1-5" },
+      { day: 363, passages: "Rev 6-11" },
+      { day: 364, passages: "Rev 12-18" },
+      { day: 365, passages: "Rev 19-22" }
+    ];
+
+    const STORAGE_KEY = 'tbr_reading_status_v1';
+    let userState = {
+      completedDays: {}, // dayNumber: timestamp
+      lastCompletedDay: 0
+    };
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          userState = JSON.parse(saved);
+        }
+      } catch (e) {
+        console.error("Failed to parse saved state", e);
+      }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(userState));
+      } catch (e) {
+        console.error("Failed to save state", e);
+      }
+      updateUI();
+    }
+
+    // Determine target day (focus item)
+    // If Day N was the last ticked day, focus is Day N (or Day N+1 if available)
+    function getFocusTargetDay() {
+      // Find maximum completed day or earliest incomplete
+      const completedNums = Object.keys(userState.completedDays).map(Number).filter(d => userState.completedDays[d]);
+      if (completedNums.length === 0) return 1;
+
+      const maxCompleted = Math.max(...completedNums);
+      // Next day to read
+      if (maxCompleted < 365) {
+        return maxCompleted + 1;
+      }
+      return maxCompleted;
+    }
+
+    const planGrid = document.getElementById('planGrid');
+    const searchInput = document.getElementById('searchInput');
+    let currentFilter = 'all';
+
+    function renderDays() {
+      planGrid.innerHTML = '';
+      const query = searchInput.value.toLowerCase().trim();
+      const focusDay = getFocusTargetDay();
+      let matchCount = 0;
+
+      READING_PLAN.forEach(item => {
+        const isDone = !!userState.completedDays[item.day];
+        const dayFormatted = String(item.day).padStart(3, '0');
+        const searchTarget = `day ${item.day} ${dayFormatted} ${item.passages}`.toLowerCase();
+
+        // Filter conditions
+        if (query && !searchTarget.includes(query)) return;
+        if (currentFilter === 'pending' && isDone) return;
+        if (currentFilter === 'completed' && !isDone) return;
+
+        matchCount++;
+
+        const isCurrentFocus = (item.day === focusDay);
+
+        const card = document.createElement('div');
+        card.id = `day-card-${item.day}`;
+        card.className = `group relative rounded-xl p-3.5 border transition-all duration-200 flex flex-col justify-between cursor-pointer select-none ${
+          isDone 
+            ? 'bg-emerald-50/70 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/60 text-emerald-950 dark:text-emerald-100 shadow-sm'
+            : isCurrentFocus
+              ? 'bg-white dark:bg-slate-800 border-brand-500 ring-2 ring-brand-500/30 pulse-target shadow-md'
+              : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800/80 hover:border-brand-400 dark:hover:border-brand-600 hover:shadow-md'
+        }`;
+
+        // External Bible reading URL
+        const bibleGatewayUrl = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(item.passages)}&version=NIV`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between gap-1 mb-2">
+              <span class="text-xs font-mono font-bold tracking-tight px-1.5 py-0.5 rounded ${
+                isDone 
+                  ? 'bg-emerald-200/60 dark:bg-emerald-800/40 text-emerald-800 dark:text-emerald-200' 
+                  : isCurrentFocus 
+                    ? 'bg-brand-100 dark:bg-brand-900/60 text-brand-700 dark:text-brand-300' 
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+              }">
+                Day ${dayFormatted}
+              </span>
+
+              <button 
+                type="button" 
+                data-action="toggle" 
+                data-day="${item.day}"
+                title="${isDone ? 'Mark as incomplete' : 'Mark as read'}" 
+                class="w-6 h-6 rounded-md flex items-center justify-center transition ${
+                  isDone 
+                    ? 'bg-emerald-600 text-white' 
+                    : 'border border-slate-300 dark:border-slate-600 text-transparent hover:border-brand-500 hover:text-brand-400'
+                }"
+              >
+                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3]"></i>
+              </button>
+            </div>
+
+            <div class="font-bold text-sm leading-snug tracking-tight text-slate-800 dark:text-slate-100 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+              ${item.passages}
+            </div>
+          </div>
+
+          <div class="mt-3 pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 dark:text-slate-500">
+            <span class="truncate">
+              ${isDone ? '✓ Completed' : isCurrentFocus ? '🎯 Up next' : 'Chronological'}
+            </span>
+            <a 
+              href="${bibleGatewayUrl}" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              onclick="event.stopPropagation();" 
+              class="p-1 hover:text-brand-500 dark:hover:text-brand-400 transition" 
+              title="Open text on BibleGateway"
+            >
+              <i data-lucide="external-link" class="w-3 h-3"></i>
+            </a>
+          </div>
+        `;
+
+        // Card click toggles status
+        card.addEventListener('click', (e) => {
+          toggleDay(item.day);
+        });
+
+        planGrid.appendChild(card);
+      });
+
+      // Handle empty search
+      const emptyNotice = document.getElementById('emptySearchNotice');
+      if (matchCount === 0) {
+        emptyNotice.classList.remove('hidden');
+      } else {
+        emptyNotice.classList.add('hidden');
+      }
+
+      if (window.lucide) {
+        lucide.createIcons();
+      }
+    }
+
+    function toggleDay(dayNumber) {
+      if (userState.completedDays[dayNumber]) {
+        delete userState.completedDays[dayNumber];
+        showToast(`Day ${dayNumber} unmarked`);
+      } else {
+        userState.completedDays[dayNumber] = new Date().toISOString();
+        userState.lastCompletedDay = dayNumber;
+        showToast(`🎉 Day ${dayNumber} completed!`);
+      }
+      saveState();
+    }
+
+    function updateUI() {
+      const completedCount = Object.keys(userState.completedDays).filter(d => userState.completedDays[d]).length;
+      const percent = Math.round((completedCount / 365) * 100);
+
+      // Top Progress
+      document.getElementById('topProgressBar').style.width = `${percent}%`;
+      document.getElementById('statProgressBar').style.width = `${percent}%`;
+      document.getElementById('percentDoneDisplay').innerText = `${percent}%`;
+      document.getElementById('fractionDoneDisplay').innerText = `${completedCount} / 365 days`;
+      document.getElementById('daysRemainingText').innerText = `${365 - completedCount} days left`;
+
+      // Update pace label
+      const paceElem = document.getElementById('yearPaceText');
+      if (completedCount >= 365) {
+        paceElem.innerText = "Completed plan! 🎊";
+      } else if (completedCount > 200) {
+        paceElem.innerText = "Over halfway there!";
+      } else if (completedCount > 50) {
+        paceElem.innerText = "Building solid momentum!";
+      } else {
+        paceElem.innerText = "Step by step, day by day";
+      }
+
+      // Update Spotlight Hero Banner
+      const focusDayNum = getFocusTargetDay();
+      const currentItem = READING_PLAN.find(p => p.day === focusDayNum) || READING_PLAN[0];
+      const isDone = !!userState.completedDays[focusDayNum];
+
+      const spotlightTitle = document.getElementById('spotlightTitle');
+      const spotlightPassage = document.getElementById('spotlightPassage');
+      const spotlightStatus = document.getElementById('spotlightStatus');
+      const spotlightActionBtn = document.getElementById('spotlightActionBtn');
+      const spotlightReadLink = document.getElementById('spotlightReadLink');
+
+      spotlightTitle.innerText = `Day ${String(currentItem.day).padStart(3, '0')}`;
+      spotlightPassage.innerText = currentItem.passages;
+      spotlightReadLink.href = `https://www.biblegateway.com/passage/?search=${encodeURIComponent(currentItem.passages)}&version=NIV`;
+
+      if (isDone) {
+        spotlightStatus.innerText = "You have completed this day's reading!";
+        spotlightActionBtn.innerHTML = `<i data-lucide="rotate-ccw" class="w-4 h-4 text-amber-600"></i> Mark Incomplete`;
+      } else {
+        spotlightStatus.innerText = "Next chronologically scheduled reading.";
+        spotlightActionBtn.innerHTML = `<i data-lucide="check-circle" class="w-4 h-4 text-emerald-600"></i> Mark Day Done`;
+      }
+
+      spotlightActionBtn.onclick = () => {
+        toggleDay(currentItem.day);
+      };
+
+      // Refresh the grid
+      renderDays();
+    }
+
+    function focusOnActiveDay(smooth = true) {
+      const targetDay = getFocusTargetDay();
+      const targetCard = document.getElementById(`day-card-${targetDay}`);
+      if (targetCard) {
+        targetCard.scrollIntoView({
+          behavior: smooth ? 'smooth' : 'auto',
+          block: 'center'
+        });
+        
+        // Brief pulse effect
+        targetCard.classList.remove('pulse-target');
+        void targetCard.offsetWidth; // trigger reflow
+        targetCard.classList.add('pulse-target');
+      }
+    }
+
+    function scrollToQuarter(dayNumber) {
+      // Clear filters so the quarter day is visible
+      currentFilter = 'all';
+      filterTabs.forEach(t => t.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'font-semibold', 'text-slate-900', 'dark:text-white', 'shadow-sm'));
+      filterTabs[0].classList.add('active', 'bg-white', 'dark:bg-slate-700', 'font-semibold', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+      searchInput.value = '';
+      renderDays();
+
+      const el = document.getElementById(`day-card-${dayNumber}`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }
+
+    let toastTimeout;
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      toastMsg.innerText = message;
+      toast.classList.remove('translate-y-16', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-16', 'opacity-0');
+      }, 2600);
+    }
+
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        filterTabs.forEach(t => {
+          t.classList.remove('active', 'bg-white', 'dark:bg-slate-700', 'font-semibold', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+        });
+        tab.classList.add('active', 'bg-white', 'dark:bg-slate-700', 'font-semibold', 'text-slate-900', 'dark:text-white', 'shadow-sm');
+        currentFilter = tab.getAttribute('data-filter');
+        renderDays();
+      });
+    });
+
+    searchInput.addEventListener('input', () => {
+      renderDays();
+    });
+
+    // Header buttons
+    document.getElementById('focusTargetBtn').addEventListener('click', () => {
+      focusOnActiveDay(true);
+    });
+
+    // Reset Progress
+    document.getElementById('resetProgressBtn').addEventListener('click', () => {
+      const confirmReset = window.confirm("Are you sure you want to reset your reading tracker back to Day 1?");
+      if (confirmReset) {
+        userState = { completedDays: {}, lastCompletedDay: 0 };
+        saveState();
+        showToast("Tracker has been reset");
+      }
+    });
+
+    const prayerModal = document.getElementById('prayerModal');
+    const prayerModalBtn = document.getElementById('prayerModalBtn');
+    const closePrayerModal = document.getElementById('closePrayerModal');
+    const modalGotItBtn = document.getElementById('modalGotItBtn');
+
+    function openPrayers() {
+      prayerModal.classList.remove('hidden');
+    }
+    function closePrayers() {
+      prayerModal.classList.add('hidden');
+    }
+
+    prayerModalBtn.addEventListener('click', openPrayers);
+    closePrayerModal.addEventListener('click', closePrayers);
+    modalGotItBtn.addEventListener('click', closePrayers);
+    prayerModal.addEventListener('click', (e) => {
+      if (e.target === prayerModal) closePrayers();
+    });
+
+    const themeToggleBtn = document.getElementById('themeToggleBtn');
+    function applyTheme() {
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+    themeToggleBtn.addEventListener('click', () => {
+      if (document.documentElement.classList.contains('dark')) {
+        document.documentElement.classList.remove('dark');
+        localStorage.theme = 'light';
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.theme = 'dark';
+      }
+    });
+    applyTheme();
+
+    window.onload = function() {
+      loadState();
+      updateUI();
+      
+      // Auto-focus and scroll to the user's active/last reading position immediately upon open
+      setTimeout(() => {
+        focusOnActiveDay(false);
+      }, 250);
+    };
+  </script>
+</body>
+</html>
