@@ -82,27 +82,42 @@
         currentUser = user;
         window.__fbUser = user;
         if (user) {
-          // Signed in — subscribe to Firestore and push local state if cloud is empty
-          const ref = doc(db, 'users', user.uid, 'progress', 'state');
-          // Fetch once to merge local into cloud if cloud is empty
-          const snap = await getDoc(ref);
-          if (!snap.exists() && window.__localUserState) {
-            // First time signing in — upload local progress to cloud
-            await setDoc(ref, window.__localUserState);
-          }
-          // Real-time listener — updates app whenever Firestore changes
-          if (unsubscribeSnapshot) unsubscribeSnapshot();
-          unsubscribeSnapshot = onSnapshot(ref, (d) => {
-            if (d.exists()) {
-              window.__applyCloudState(d.data());
+          // ✅ Update UI immediately — before any async Firestore work
+          if (window.__updateAuthUI) window.__updateAuthUI(user);
+          if (window.__showToast) window.__showToast('☁️ Signed in — syncing…');
+
+          try {
+            const ref = doc(db, 'users', user.uid, 'progress', 'state');
+
+            // Fetch once: upload local progress to cloud on first sign-in
+            const snap = await getDoc(ref);
+            if (!snap.exists() && window.__localUserState &&
+                Object.keys(window.__localUserState.completedDays || {}).length > 0) {
+              await setDoc(ref, window.__localUserState);
             }
-          });
-          window.__updateAuthUI(user);
-          window.__showToast('☁️ Signed in & syncing across devices', 'success');
+
+            // Real-time listener — updates app whenever Firestore changes from any device
+            if (unsubscribeSnapshot) unsubscribeSnapshot();
+            unsubscribeSnapshot = onSnapshot(ref, (d) => {
+              if (d.exists() && window.__applyCloudState) {
+                window.__applyCloudState(d.data());
+              }
+            }, (err) => {
+              console.error('Firestore listener error:', err);
+              if (window.__showToast) window.__showToast('⚠️ Sync error — check Firestore rules');
+            });
+
+            if (window.__showToast) window.__showToast('✅ Synced across devices');
+          } catch (err) {
+            console.error('Firestore setup error:', err);
+            if (window.__showToast) {
+              window.__showToast('⚠️ Signed in but sync failed — check Firestore rules');
+            }
+          }
         } else {
           // Signed out
           if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
-          window.__updateAuthUI(null);
+          if (window.__updateAuthUI) window.__updateAuthUI(null);
         }
       });
     }
