@@ -1,0 +1,11 @@
+# Secret Firebase configuration (keep out of public GitHub repositories)
+firebase-config.js
+config.js
+.env
+.env.local
+
+# Operating System & IDE artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
