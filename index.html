@@ -109,10 +109,13 @@
 
             if (window.__showToast) window.__showToast('✅ Synced across devices');
           } catch (err) {
-            console.error('Firestore setup error:', err);
-            if (window.__showToast) {
-              window.__showToast('⚠️ Signed in but sync failed — check Firestore rules');
-            }
+            console.error('Firestore setup error:', err.code, err.message, err);
+            const hint = err.code === 'permission-denied'
+              ? '⚠️ Firestore rules blocked access — check rules & authorized domains'
+              : err.code === 'unavailable'
+              ? '⚠️ Firestore unavailable — check your internet connection'
+              : `⚠️ Sync error: ${err.code || err.message}`;
+            if (window.__showToast) window.__showToast(hint);
           }
         } else {
           // Signed out
