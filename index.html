@@ -87,10 +87,27 @@
           if (window.__showToast) window.__showToast('☁️ Signed in — syncing…');
 
           try {
-            const ref = doc(db, 'users', user.uid, 'progress', 'state');
+            // Direct document path at users/{uid} (simplest & matches standard Firestore security rules)
+            const ref = doc(db, 'users', user.uid);
 
             // Fetch once: upload local progress to cloud on first sign-in
-            const snap = await getDoc(ref);
+            let snap = await getDoc(ref);
+            
+            // Check legacy path as fallback if direct document doesn't exist
+            if (!snap.exists()) {
+              try {
+                const legacyRef = doc(db, 'users', user.uid, 'progress', 'state');
+                const legacySnap = await getDoc(legacyRef);
+                if (legacySnap.exists()) {
+                  snap = legacySnap;
+                  // Migrate to top-level document
+                  await setDoc(ref, legacySnap.data());
+                }
+              } catch (e) {
+                // Ignore legacy check error if subcollections are blocked
+              }
+            }
+
             if (!snap.exists() && window.__localUserState &&
                 Object.keys(window.__localUserState.completedDays || {}).length > 0) {
               await setDoc(ref, window.__localUserState);
@@ -111,7 +128,7 @@
           } catch (err) {
             console.error('Firestore setup error:', err.code, err.message, err);
             const hint = err.code === 'permission-denied'
-              ? '⚠️ Firestore rules blocked access — check rules & authorized domains'
+              ? '⚠️ Firestore rules blocked access — check rules & click Publish'
               : err.code === 'unavailable'
               ? '⚠️ Firestore unavailable — check your internet connection'
               : `⚠️ Sync error: ${err.code || err.message}`;
@@ -128,7 +145,7 @@
     // Exposed helpers called by the main script
     window.__firebaseSaveState = async (state) => {
       if (!IS_CONFIGURED || !currentUser || !db) return;
-      const ref = doc(db, 'users', currentUser.uid, 'progress', 'state');
+      const ref = doc(db, 'users', currentUser.uid);
       await setDoc(ref, state);
     };
 
